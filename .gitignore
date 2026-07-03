@@ -1,0 +1,68 @@
+/.phpunit.cache
+/public/build
+/public/fonts-manifest.dev.json
+/storage/pail
+*.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/auth.json
+/.fleet
+/.idea
+/.nova
+/.zed
+
+# Laravel specific items
+/vendor
+# vendor
+/node_modules
+
+# Directories to ignore
+/.vagrant
+.vscode
+.DS_Store
+
+# Laravel generated files
+/public/hot
+/public/storage
+/storage/*.key
+/storage/app/public
+/storage/framework/cache/data
+/storage/framework/sessions
+/storage/framework/testing
+/storage/framework/views
+/storage/logs
+
+# Composer and NPM
+composer.lock
+
+
+# Laravel Mix
+/public/js/*.js
+/public/css/*.css
+/public/mix-manifest.json
+#/public/hot
+
+# Debugbar
+/storage/debugbar
+
+# Ignoring specific extension-based files
+*.swp
+*.log
+*.sql
+*.sqlite
+*.http
+
+# macOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
+
+#code analysis
+phpstan.neon.dist
