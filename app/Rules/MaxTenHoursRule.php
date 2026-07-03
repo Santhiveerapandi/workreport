@@ -28,7 +28,8 @@ class MaxTenHoursRule implements ValidationRule
         
         // 2. Check total for the day if date is provided 
         if ($this->date) { 
-            $existingMinutes = WorkReport::where('employee_id', "=", Auth::id(), "true") ->where('work_report_date', $this->date) ->sum('duration_minutes'); 
+            $existingMinutes = WorkReport::where('employee_id', "=", auth()->id())->where('work_report_date', $this->date) ->sum('duration_minutes');
+            
             if (($existingMinutes + $newMinutes) > 600) { 
                 $fail('The total duration for this date cannot exceed 10 hours.'); 
             } 

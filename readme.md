@@ -216,3 +216,30 @@ You can download it from the official site:
 [Laravel Herd Downloads](https://herd.laravel.com/windows?utm_source=chatgpt.com)
 
 
+# Repository Based Project Deployment and Run:
+
+> git clone https://github.com/Santhiveerapandi/workreport.git
+> cd workreport
+
+## Check Requirements
+> composer --version
+Composer version 2.10.2 2026-07-01 11:24:45
+PHP version 8.4.23
+### Hard-Delete the Cached Boot Files
+del bootstrap\cache\packages.php
+del bootstrap\cache\services.php
+
+> copy .env.example .env
+
+> mkdir storage\framework\views
+> mkdir storage\framework\sessions
+> mkdir storage\framework\views
+
+
+> composer install
+> composer update
+
+> composer clear-cache
+> composer dump-autoload
+
+> php artisan migrate --seed

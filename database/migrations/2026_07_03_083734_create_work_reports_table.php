@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('work_reports', function (Blueprint $table) {
             $table->id(); 
-            $table->foreignId('employee_id')->constrained(); //user_id 
+            $table->foreignId('employee_id'); //user_id 
             $table->date('work_report_date'); 
             $table->foreignId('project_id'); 
             // $table->text('description'); 

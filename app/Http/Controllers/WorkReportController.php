@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\WorkReport;
 use App\Concerns\common;
 use App\Rules\NoLeaveOnDate;
+use Illuminate\Support\Facades\Validator;
 
 class WorkReportController extends Controller
 {
@@ -27,7 +28,8 @@ class WorkReportController extends Controller
         $employeeId = auth()->id(); 
         // Proceed to save the work report // ... logic to save to work_reports table
         try {
-            $validate = $request->validate([
+
+            $validator = Validator::make($request->all(), [
                 'work_report_date' => [
                     'required', 
                     'date', 
@@ -36,9 +38,25 @@ class WorkReportController extends Controller
                 ], 
                 'project_id' => 'required|exists:projects,id', 
                 // 'description' => 'required|string|max:255', 
-                'duration_input' => ['required', new MaxTenHoursRule($request->work_report_date)]
+                'duration_input' => ['required', new MaxTenHoursRule($request->input('work_report_date'))]
             ]);
 
+            /* $validate = $request->validate([
+                'work_report_date' => [
+                    'required', 
+                    'date', 
+                    'before_or_equal:today', 
+                    new NoLeaveOnDate
+                ], 
+                'project_id' => 'required|exists:projects,id', 
+                // 'description' => 'required|string|max:255', 
+                'duration_input' => ['required', new MaxTenHoursRule($request->input('work_report_date'))]
+            ]); */
+            if ($validator->fails()) {
+                return redirect(route('workreport.showForm'))
+                    ->withErrors($validator)
+                    ->withInput();
+            }
             $data= \App\Models\WorkReport::create([
                 'employee_id' => $employeeId,
                 'work_report_date' => $reportDate,
@@ -54,7 +72,7 @@ class WorkReportController extends Controller
             return redirect()->back()->withErrors(['message'=>'This Project Already entered today'])->withInput();
             throw $e;
         } catch (Exception $e){
-                
+            return redirect()->back()->withErrors(['error'=>$e->getCode(), 'message'=>'validation errors'])->withInput();
         }
     }
 }

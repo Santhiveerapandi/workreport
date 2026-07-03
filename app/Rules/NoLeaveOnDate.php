@@ -13,7 +13,7 @@ class NoLeaveOnDate implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void 
     { 
         // Check if a leave exists for the current user on the selected $value (date) 
-        $hasLeave = Leave::where('user_id', Auth::id()) 
+        $hasLeave = Leave::where('employee_id', Auth::id()) 
             ->whereDate('start_date', '<=', $value) 
             ->whereDate('end_date', '>=', $value) 
             ->exists(); 

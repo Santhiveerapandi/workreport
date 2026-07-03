@@ -9,6 +9,11 @@
         <div class="bg-gray-700">{{ __('Add WorkReport') }}</div>
     </div>
     <div class="mb-10">
+        <div class="mb-10">
+        @foreach ($errors->all() as $message) 
+            <p class="bg-gray-700">{{ $message }}</p>
+        @endforeach
+        </div>
         <form method='post' action="{{ route('workreport.addTask') }}" wire:submit="addTask">
         @csrf
             <div class="mb-5">
@@ -53,27 +58,28 @@
     <div class="overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500"> 
 
-            @if(isset($tasks)!==NULL)
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr>
-                <th scope="col" class="px-6 py-3"> {{ __('Report Date') }} </th>
-                <th scope="col" class="px-6 py-3"> {{ __('Project Name') }} </th>
-                <th scope="col" class="px-6 py-3"> {{ __('Duration Hours') }} </th>
-                <th scope="col" class="px-6 py-3 text-right "> {{ __('Actions') }} </th>
-            </tr>
-            </thead>
-            @foreach($tasks as $index => $task) 
-            <tr class="bg-white border-b hover:bg-gray-50"> 
-                <td class="px-6 py-4">
-                    {{ $task['work_report_date'] }}</td> 
-                <td class="px-6 py-4">
-                    {{ $task['project']["name"] }}</td> 
-                <td class="px-6 py-4">
-                    {{ $task['duration_minutes'] / 60 }} hours</td>
-                <td class="px-6 py-4">
-                    <button class="font-medium text-blue-600 hover:underline" wire:click="removeTask({{ $index }})">Delete</button></td> 
-            </tr> 
-            @endforeach 
+            @if($tasks!==NULL)
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3"> {{ __('Report Date') }} </th>
+                    <th scope="col" class="px-6 py-3"> {{ __('Project Name') }} </th>
+                    <th scope="col" class="px-6 py-3"> {{ __('Duration Hours') }} </th>
+                    <th scope="col" class="px-6 py-3 text-right "> {{ __('Actions') }} </th>
+                </tr>
+                </thead>
+                @foreach($tasks as $index => $task) 
+                <tr class="bg-white border-b hover:bg-gray-50"> 
+                    <td class="px-6 py-4">
+                        {{ $task['work_report_date'] }}</td> 
+                    <td class="px-6 py-4">
+                        {{ $task['project']["name"] }}</td> 
+                    <td class="px-6 py-4">
+                        {{ $task['duration_minutes'] / 60 }} hours</td>
+                    <td class="px-6 py-4">
+                        <button class="font-medium text-blue-600 hover:underline" 
+                        wire:click="removeTask({{ $index }})">Delete</button></td> 
+                </tr> 
+                @endforeach 
             @endif
         </table> 
         <div class="mt-4">
