@@ -1,4 +1,4 @@
-<x-layouts::app :title="__('Employee|WorkReport')">
+<x-layouts::app :title="__('Employee | WorkReport')">
 <section class="w-full">
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Employee Workreport') }}</flux:heading>
@@ -11,8 +11,33 @@
     <div class="mb-10">
         <div class="mb-10">
         @foreach ($errors->all() as $message) 
-            <p class="bg-gray-700">{{ $message }}</p>
+        <div  
+            x-data="{ show: true }" 
+            x-init="setTimeout(() => show = false, 5000)" 
+            x-show="show"
+            x-transition.duration.500ms
+            class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="bg-gray-700">{{ $message }}</span>
+        </div>
         @endforeach
+
+        @if (session('success'))
+            <div 
+            x-data="{ show: true }" 
+            x-init="setTimeout(() => show = false, 5000)" 
+            x-show="show"
+            x-transition.duration.500ms
+            class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" 
+            role="alert">
+                <strong class="font-bold">Success!</strong>
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+<!--             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <strong class="font-bold">Success!</strong>
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div> -->
+        @endif
         </div>
         <form method='post' action="{{ route('workreport.addTask') }}" wire:submit="addTask">
         @csrf
@@ -37,7 +62,14 @@
             @error('form.project_id') <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
             @enderror
             </div>
-
+            <div class="mb-5">
+                <label for="task_description" class="block mb-2 text-sm font-medium text-red-700">
+                    Task Description</label>
+                <textarea name="task_description" max="255" wire:model="form.task_description"
+            class="bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5"></textarea> 
+                @error('form.task_description') <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
             <div class="mb-5">
                 <label for="project_id" class="block mb-2 text-sm font-medium text-red-700">
                 Duration</label> 
@@ -57,7 +89,6 @@
     </div>
     <div class="overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500"> 
-
             @if($tasks!==NULL)
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -76,8 +107,15 @@
                     <td class="px-6 py-4">
                         {{ $task['duration_minutes'] / 60 }} hours</td>
                     <td class="px-6 py-4">
-                        <button class="font-medium text-blue-600 hover:underline" 
-                        wire:click="removeTask({{ $index }})">Delete</button></td> 
+                        <a herf="{{ route('workreport.view', [ 'id'=> $task['id'] ] ) }}"
+                        class="text-yellow-600 hover:underline">View</a>
+                        <form action="{{ route('workreport.destroy', $task['id']) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="font-medium text-blue-600 hover:underline" 
+                        wire:click="removeTask({{ $index }})">Delete</button>
+                        </form>
+                    </td> 
                 </tr> 
                 @endforeach 
             @endif
